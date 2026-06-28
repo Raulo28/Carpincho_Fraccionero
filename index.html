@@ -19,10 +19,10 @@
         
         .fraction-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+            box-shadow: 0 6px 10px -3px rgb(0 0 0 / 0.2);
         }
         .fraction-card:hover { 
-            transform: scale(1.12) rotate(3deg); 
+            transform: scale(1.1) rotate(2deg); 
         }
         .fraction-card.selected {
             animation: pulse 800ms infinite;
@@ -31,105 +31,185 @@
         }
         @keyframes pulse { 
             0%,100% { transform: scale(1); } 
-            50% { transform: scale(1.18); } 
+            50% { transform: scale(1.12); } 
         }
         
         #carpincho { 
-            transition: all 1.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            filter: drop-shadow(0 15px 10px rgb(0 0 0 / 0.35));
+            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.3));
             z-index: 40;
         }
-        
-        #action-bar {
-            animation: popIn 0.3s ease;
+
+        /* Ajustes específicos para pantallas bajas (Celular Horizontal) */
+        @media (max-height: 580px) {
+            #main-layout {
+                flex-direction: row !important;
+                align-items: stretch !important;
+                gap: 12px !important;
+            }
+            #top-bar {
+                flex-direction: column !important;
+                width: 220px !important;
+                height: auto !important;
+                padding: 12px !important;
+                justify-content: flex-start !important;
+                gap: 8px !important;
+            }
+            #top-bar .stats-container {
+                flex-direction: column !important;
+                gap: 6px !important;
+                width: 100% !important;
+            }
+            #top-bar .stats-container > div {
+                width: 100% !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                text-align: left !important;
+                background: #f9fafb;
+                padding: 2px 8px !important;
+                border-radius: 8px !important;
+            }
+            #top-bar .stats-container div div:last-child {
+                font-size: 1.25rem !important;
+                line-height: 1 !important;
+            }
+            #play-area {
+                flex-grow: 1 !important;
+                height: auto !important;
+                min-height: 320px !important;
+            }
+            .fraction-card {
+                width: 75px !important;
+                height: 75px !important;
+                font-size: 1.25rem !important;
+                border-width: 3px !important;
+            }
+            .fraction-card span {
+                font-size: 1.25rem !important;
+            }
+            .fraction-card .border-t-2 {
+                width: 24px !important;
+            }
+            #speech-container {
+                top: auto !important;
+                bottom: 12px !important;
+                left: 12px !important;
+                transform: none !important;
+                width: 200px !important;
+                max-w: 200px !important;
+            }
+            #speech-bubble {
+                padding: 6px 10px !important;
+            }
+            #speech-text { display: none !important; }
+            #speech-operation { font-size: 0.95rem !important; }
+            #action-bar {
+                bottom: 12px !important;
+                right: 12px !important;
+                left: auto !important;
+                transform: none !important;
+                padding: 6px 12px !important;
+                flex-direction: column-reverse !important;
+                gap: 4px !important;
+            }
+            #action-bar button:first-child {
+                padding: 6px 14px !important;
+                font-size: 1rem !important;
+            }
+            #madriguera-box {
+                width: 80px !important;
+                height: 70px !important;
+            }
+            #madriguera-box .text-6xl { font-size: 3rem !important; }
+            #carpincho { font-size: 4rem !important; }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center justify-center p-2 sm:p-4">
 
-    <div class="max-w-[1100px] w-full">
+    <div id="main-layout" class="max-w-[1150px] w-full flex flex-col">
         <!-- Encabezado Estadísticas -->
-        <div class="bg-white rounded-3xl shadow-xl px-8 py-4 flex items-center justify-between mb-4">
+        <div id="top-bar" class="bg-white rounded-3xl shadow-xl px-6 py-3 flex items-center justify-between mb-3 transition-all">
             <div class="flex items-center gap-3">
-                <div class="text-4xl">🦫</div>
+                <div class="text-3xl sm:text-4xl">🦫</div>
                 <div>
-                    <h1 class="text-2xl font-bold text-amber-600 leading-tight">Carpincho Fraccionero</h1>
-                    <p class="text-emerald-600 text-sm">¡Suma y resta enteros!</p>
+                    <h1 class="text-lg sm:text-2xl font-bold text-amber-600 leading-tight">Carpincho Fraccionero</h1>
+                    <p class="text-emerald-600 text-xs sm:text-sm">¡Suma y resta enteros!</p>
                 </div>
             </div>
             
-            <div class="flex gap-8 items-center">
-                <!-- TEMPORIZADOR NUEVO -->
-                <div class="text-center bg-amber-50 px-4 py-1.5 rounded-2xl border-2 border-amber-200 min-w-[100px]">
-                    <div class="text-xs uppercase tracking-widest text-amber-700 font-bold">Tiempo</div>
-                    <div id="timer-display" class="text-3xl font-bold text-amber-600 animate-pulse">20s</div>
+            <div class="stats-container flex flex-wrap gap-4 sm:gap-6 items-center justify-end">
+                <!-- TEMPORIZADOR -->
+                <div class="text-center bg-amber-50 px-3 py-1 rounded-xl border-2 border-amber-200 min-w-[80px]">
+                    <div class="text-[10px] uppercase tracking-widest text-amber-700 font-bold">Tiempo</div>
+                    <div id="timer-display" class="text-2xl font-bold text-amber-600">20s</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-xs uppercase tracking-widest text-gray-500">Intentos</div>
-                    <div id="attempts-display" class="text-3xl font-bold text-gray-700">0 / 20</div>
+                    <div class="text-[10px] uppercase tracking-widest text-gray-500">Intentos</div>
+                    <div id="attempts-display" class="text-2xl font-bold text-gray-700">0 / 20</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-xs uppercase tracking-widest text-gray-500">Errores</div>
-                    <div id="errors-display" class="text-3xl font-bold text-red-500">0 / 3</div>
+                    <div class="text-[10px] uppercase tracking-widest text-gray-500">Errores</div>
+                    <div id="errors-display" class="text-2xl font-bold text-red-500">0 / 3</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-xs uppercase tracking-widest text-gray-500">Puntaje</div>
-                    <div id="score-display" class="text-3xl font-bold text-emerald-600">0</div>
+                    <div class="text-[10px] uppercase tracking-widest text-gray-500">Puntaje</div>
+                    <div id="score-display" class="text-2xl font-bold text-emerald-600">0</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-xs uppercase tracking-widest text-gray-500">Enteros</div>
-                    <div id="successful-display" class="text-3xl font-bold text-amber-600">0</div>
+                    <div class="text-[10px] uppercase tracking-widest text-gray-500">Enteros</div>
+                    <div id="successful-display" class="text-2xl font-bold text-amber-600">0</div>
                 </div>
                 
-                <button onclick="toggleMusic()" 
-                        class="flex items-center justify-center w-10 h-10 bg-amber-100 hover:bg-amber-200 rounded-xl text-2xl transition-colors">
-                    🎵
+                <button id="music-btn" onclick="toggleMusic()" 
+                        class="flex items-center justify-center w-8 h-8 bg-emerald-100 hover:bg-emerald-200 rounded-lg text-lg transition-colors border-2 border-emerald-300">
+                    🔊
                 </button>
             </div>
         </div>
 
         <!-- Área del juego -->
-        <div id="play-area" class="relative w-full h-[580px] bg-gradient-to-br from-emerald-300 to-emerald-400 rounded-3xl overflow-hidden border-8 border-emerald-600">
+        <div id="play-area" class="relative w-full h-[520px] bg-gradient-to-br from-emerald-300 to-emerald-400 rounded-3xl overflow-hidden border-4 sm:border-8 border-emerald-600 transition-all">
 
             <!-- Aviso Temporal de Restas -->
-            <div id="restas-alert" class="hidden opacity-0 transition-opacity duration-300 absolute inset-0 bg-black/40 flex items-center justify-center z-50">
-                <div class="bg-amber-500 text-white font-bold text-4xl px-12 py-6 rounded-3xl shadow-2xl border-4 border-white text-center max-w-xl animate-bounce">
+            <div id="restas-alert" class="hidden opacity-0 transition-opacity duration-300 absolute inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+                <div class="bg-amber-500 text-white font-bold text-2xl sm:text-4xl px-8 py-4 rounded-3xl shadow-2xl border-4 border-white text-center max-w-xl animate-bounce">
                     ¡Habilitadas las RESTAS! 🦫✨<br>
-                    <span class="text-xl font-normal block mt-2">Elige 2 cartas (una mixta) para restarlas automáticamente.</span>
+                    <span class="text-base sm:text-xl font-normal block mt-2">Elige 2 cartas (una mixta) para restarlas automáticamente.</span>
                 </div>
             </div>
 
             <!-- Madriguera Central -->
             <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
-                <div class="w-36 h-32 bg-gradient-to-b from-amber-900 to-amber-950 rounded-3xl border-8 border-amber-800 flex items-center justify-center relative">
-                    <div class="text-6xl">🏠</div>
-                    <div class="absolute -top-5 text-3xl">🌱🌿</div>
+                <div id="madriguera-box" class="w-28 h-24 bg-gradient-to-b from-amber-900 to-amber-950 rounded-2xl border-4 sm:border-8 border-amber-800 flex items-center justify-center relative">
+                    <div class="text-4xl sm:text-6xl">🏠</div>
                 </div>
             </div>
 
             <!-- Carpincho -->
-            <div id="carpincho" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-8xl z-40">🦫</div>
+            <div id="carpincho" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl sm:text-8xl z-40">🦫</div>
 
             <!-- Contenedor de fracciones -->
             <div id="fractions-container" class="absolute inset-0 z-20"></div>
 
-            <!-- Mensaje guía integrado arriba (Protegido para no tapar cartas) -->
-            <div class="absolute top-4 left-1/2 -translate-x-1/2 z-30 w-full max-w-lg px-4">
-                <div id="speech-bubble" class="bg-white/95 backdrop-blur px-6 py-2.5 rounded-2xl text-center shadow-xl border-4 border-amber-300">
-                    <span id="speech-text" class="block text-gray-600 text-xs font-semibold tracking-wide uppercase">Cargando juego...</span>
-                    <span id="speech-operation" class="block text-amber-600 text-xl font-bold">¡A jugar!</span>
+            <!-- Mensaje guía integrado -->
+            <div id="speech-container" class="absolute top-3 left-1/2 -translate-x-1/2 z-30 w-full max-w-md px-2">
+                <div id="speech-bubble" class="bg-white/95 backdrop-blur px-4 py-1.5 rounded-xl text-center shadow-md border-2 border-amber-300">
+                    <span id="speech-text" class="block text-gray-500 text-[10px] font-semibold tracking-wide uppercase">SUMAS DE ENTEROS:</span>
+                    <span id="speech-operation" class="block text-amber-600 text-base sm:text-lg font-bold leading-tight">¡A jugar!</span>
                 </div>
             </div>
 
-            <!-- Barra de acción abajo (Espacio reservado) -->
-            <div id="action-bar" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 bg-white shadow-2xl rounded-2xl px-6 py-2 flex items-center gap-4 z-50">
+            <!-- Barra de acción -->
+            <div id="action-bar" class="hidden absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/95 shadow-xl rounded-xl px-4 py-2 flex items-center gap-3 z-50 border border-gray-100">
                 <button onclick="verifyCombination()" 
-                        class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-3 rounded-xl text-xl flex items-center gap-2">
+                        class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-2 rounded-lg text-base flex items-center gap-1.5 shadow">
                     <span>¡Verificar!</span>
-                    <span class="text-2xl">🦫</span>
+                    <span class="text-lg">🦫</span>
                 </button>
                 <button onclick="cancelSelection()" 
-                        class="text-gray-400 hover:text-gray-600 font-semibold text-sm px-2">
+                        class="text-gray-400 hover:text-gray-600 font-semibold text-xs px-1">
                     Limpiar
                 </button>
             </div>
@@ -137,28 +217,28 @@
             <!-- Pantalla de inicio -->
             <div id="start-overlay" onclick="iniciarJuego()" 
                  class="absolute inset-0 bg-black/70 flex items-center justify-center z-50 cursor-pointer">
-                <div class="bg-white rounded-3xl p-10 text-center max-w-md mx-4">
-                    <div class="text-7xl mb-4">🦫</div>
-                    <h2 class="text-3xl font-bold text-emerald-600 mb-2">¡Listos para jugar!</h2>
-                    <p class="text-gray-600 mb-6 text-sm">Selecciona cartas que formen enteros.<br>¡Ojo! El tiempo corre más rápido en cada ronda.</p>
-                    <div class="inline-block bg-emerald-500 text-white font-bold text-2xl px-10 py-4 rounded-2xl shadow-lg">
-                        ¡EMPEZAR A JUGAR!
+                <div class="bg-white rounded-2xl p-6 sm:p-10 text-center max-w-xs sm:max-w-md mx-4">
+                    <div class="text-5xl sm:text-7xl mb-3">🦫</div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-emerald-600 mb-1">¡Listos para jugar!</h2>
+                    <p class="text-gray-500 mb-4 text-xs sm:text-sm">Selecciona cartas que formen enteros.<br>¡El tiempo se acelera al avanzar!</p>
+                    <div class="inline-block bg-emerald-500 text-white font-bold text-lg sm:text-2xl px-8 py-3 rounded-xl shadow-lg">
+                        ¡EMPEZAR!
                     </div>
                 </div>
             </div>
 
             <!-- Pantalla final -->
             <div id="end-screen" class="hidden absolute inset-0 bg-black/80 flex items-center justify-center z-50">
-                <div class="bg-white rounded-3xl p-12 text-center max-w-md mx-4">
-                    <div id="end-icon" class="text-7xl mb-4">🎉</div>
-                    <h2 id="end-title" class="text-4xl font-bold text-emerald-600">¡Juego Terminado!</h2>
-                    <div class="my-8 space-y-4 text-left text-xl">
+                <div class="bg-white rounded-2xl p-8 text-center max-w-sm mx-4">
+                    <div id="end-icon" class="text-6xl mb-3">🎉</div>
+                    <h2 id="end-title" class="text-2xl sm:text-3xl font-bold text-emerald-600">¡Juego Terminado!</h2>
+                    <div class="my-6 space-y-3 text-left text-base sm:text-lg">
                         <div class="flex justify-between"><span>Puntaje final:</span> <span id="final-score" class="font-bold"></span></div>
                         <div class="flex justify-between"><span>Enteros armados:</span> <span id="final-success" class="font-bold"></span></div>
                         <div class="flex justify-between"><span>Errores:</span> <span id="final-errors" class="font-bold text-red-500"></span></div>
                     </div>
                     <button onclick="location.reload()" 
-                            class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-2xl px-10 py-4 rounded-3xl w-full">
+                            class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xl px-8 py-3 rounded-xl w-full">
                         Jugar de nuevo
                     </button>
                 </div>
@@ -176,10 +256,9 @@
         let selected = [];
         let boardCards = [];
         let isAnimating = false;
-        let musicOn = false;
+        let musicOn = true; // Cambiado a true por defecto
         let lockBubble = false;
 
-        // Variables del Temporizador
         let timerInterval = null;
         let timeLeft = 20;
 
@@ -187,21 +266,17 @@
         const basicPool = ["1/2","1/4","3/4","1/3","2/3","1/5","4/5","2/5","3/5","1/6","5/6","3/8","5/8","2/4"];
         const mixedPool = ["1 1/4","1 1/2","1 3/4","2 1/4","2 1/2","2 3/4","3 1/4"];
 
-        // 12 posiciones redistribuidas estratégicamente para EVITAR los carteles superior e inferior
         const positions = [
-            {left: '6%', top: '22%'},  {left: '24%', top: '18%'}, {left: '42%', top: '23%'},
-            {left: '60%', top: '19%'}, {left: '76%', top: '21%'}, {left: '90%', top: '30%'},
-            {left: '6%', top: '56%'},  {left: '22%', top: '64%'}, {left: '40%', top: '58%'},
-            {left: '62%', top: '66%'}, {left: '78%', top: '58%'}, {left: '89%', top: '52%'}
+            {left: '7%', top: '16%'},  {left: '25%', top: '15%'}, {left: '43%', top: '18%'},
+            {left: '61%', top: '15%'}, {left: '77%', top: '16%'}, {left: '89%', top: '26%'},
+            {left: '7%', top: '58%'},  {left: '23%', top: '68%'}, {left: '41%', top: '62%'},
+            {left: '61%', top: '68%'}, {left: '77%', top: '58%'}, {left: '89%', top: '54%'}
         ];
 
-        // ====================== SISTEMA DE TIEMPO DINÁMICO ======================
         function getMaxTimeForAttempt(currentAttempt) {
-            // El intento actual de la jugada entrante es attempts + 1
             const nextAttempt = currentAttempt + 1;
             if (nextAttempt <= 5) return 20;
-            if (nextAttempt <= 10) return 15;
-            return 10;
+            return 15;
         }
 
         function startTimer() {
@@ -210,7 +285,7 @@
             updateTimerDisplay();
 
             timerInterval = setInterval(() => {
-                if (isAnimating) return; // Pausa el tiempo mientras el carpincho viaja
+                if (isAnimating) return; 
                 
                 timeLeft--;
                 updateTimerDisplay();
@@ -226,9 +301,9 @@
             const display = document.getElementById('timer-display');
             display.textContent = `${timeLeft}s`;
             if (timeLeft <= 3) {
-                display.className = "text-3xl font-bold text-red-600 animate-ping";
+                display.className = "text-2xl font-bold text-red-600 animate-ping";
             } else {
-                display.className = "text-3xl font-bold text-amber-600";
+                display.className = "text-2xl font-bold text-amber-600";
             }
         }
 
@@ -240,7 +315,7 @@
             document.getElementById('errors-display').textContent = `${errors} / 3`;
             
             lockBubble = true;
-            showSpeechWithOperation("⏳ ¡Se acabó el tiempo!", "Perdiste este intento");
+            showSpeechWithOperation("⏳ ¡Tiempo agotado!", "Perdiste un intento");
 
             if (attempts === 10) triggerRestasAlert();
 
@@ -274,13 +349,7 @@
             return obj.num / obj.den;
         }
 
-        function formatEnterosText(amount) {
-            return amount === 1 ? "1 entero" : `${amount} enteros`;
-        }
-
-        function gcd(a, b) {
-            while (b) { const t = b; b = a % b; a = t; } return a;
-        }
+        function gcd(a, b) { while (b) { const t = b; b = a % b; a = t; } return a; }
         function lcm(a, b) { return a * b / gcd(a, b) || 1; }
         function lcmArray(arr) { return arr.reduce((acc, val) => lcm(acc, val), 1); }
 
@@ -365,7 +434,7 @@
         // ====================== TARJETAS ======================
         function createCard(fraction, posIndex) {
             const card = document.createElement('div');
-            card.className = `fraction-card absolute w-28 h-27 bg-white border-4 border-amber-400 rounded-3xl flex items-center justify-center text-4xl font-bold cursor-pointer select-none`;
+            card.className = `fraction-card absolute w-24 h-24 bg-white border-4 border-amber-400 rounded-2xl flex items-center justify-center text-3xl font-bold cursor-pointer select-none`;
             
             const pos = positions[posIndex % positions.length];
             card.style.left = pos.left;
@@ -376,10 +445,10 @@
             if (fraction.includes(' ')) {
                 const [whole, frac] = fraction.split(' ');
                 const [num, den] = frac.split('/');
-                card.innerHTML = `<div class="text-center"><span class="text-3xl text-amber-600 font-bold">${whole}</span><span class="text-xl mx-0.5 text-gray-400">+</span><div class="flex flex-col items-center inline-flex vertical-align-middle leading-none"><span>${num}</span><span class="border-t-2 border-amber-400 w-7 my-0.5"></span><span>${den}</span></div></div>`;
+                card.innerHTML = `<div class="text-center"><span class="text-2xl text-amber-600 font-bold">${whole}</span><span class="text-lg mx-0.5 text-gray-400">+</span><div class="flex flex-col items-center inline-flex vertical-align-middle leading-none"><span>${num}</span><span class="border-t-2 border-amber-400 w-6 my-0.5"></span><span>${den}</span></div></div>`;
             } else {
                 const [num, den] = fraction.split('/');
-                card.innerHTML = `<div class="flex flex-col items-center leading-none"><span>${num}</span><span class="border-t-2 border-amber-400 w-10 my-0.5"></span><span>${den}</span></div>`;
+                card.innerHTML = `<div class="flex flex-col items-center leading-none"><span>${num}</span><span class="border-t-2 border-amber-400 w-8 my-0.5"></span><span>${den}</span></div>`;
             }
             
             card.onclick = () => handleCardClick(card, fraction);
@@ -413,12 +482,12 @@
             const opEl = document.getElementById('speech-operation');
             
             if (selected.length === 0) {
-                textEl.textContent = attempts >= 10 ? "RESTAS (2 cartas, una mixta) o SUMAS (2-4 cartas):" : "Suma de 2 a 4 fracciones:";
+                textEl.textContent = attempts >= 10 ? "RESTAS O SUMAS:" : "SUMAS DE ENTEROS:";
                 opEl.textContent = "¡Elige tu jugada! 🦫";
                 return;
             }
             if (selected.length === 1) {
-                textEl.textContent = "Agrega otra fracción a la mesa...";
+                textEl.textContent = "Agrega otra fracción...";
                 opEl.textContent = `${selected[0].value} + ?`;
                 return;
             }
@@ -427,9 +496,9 @@
                 const sub = getSubValue(a, b);
                 const larger = calculateValue(a) > calculateValue(b) ? a : b;
                 const smaller = calculateValue(a) > calculateValue(b) ? b : a;
-                textEl.textContent = "Previsualizando RESTA automática:";
+                textEl.textContent = "Resta automática:";
                 if (sub.num % sub.den === 0) {
-                    opEl.innerHTML = `${larger} - ${smaller} = <span class="text-emerald-600">${sub.num/sub.den} (¡Válido! 🎉)</span>`;
+                    opEl.innerHTML = `${larger} - ${smaller} = <span class="text-emerald-600">${sub.num/sub.den} (¡Entero! 🎉)</span>`;
                 } else {
                     const g = gcd(sub.num, sub.den);
                     opEl.innerHTML = `${larger} - ${smaller} = <span class="text-red-500">${sub.num/g}/${sub.den/g}</span>`;
@@ -437,14 +506,14 @@
                 return;
             }
 
-            textEl.textContent = `Previsualizando SUMA (${selected.length} cartas):`;
+            textEl.textContent = `Suma (${selected.length} cartas):`;
             const values = selected.map(s => s.value);
             const sum = getSumValue(values);
             if (sum.num % sum.den === 0) {
-                opEl.innerHTML = `${values.join(' + ')} = <span class="text-emerald-600">${sum.num/sum.den} (¡Válido! 🎉)</span>`;
+                opEl.innerHTML = `${values.join('+')} = <span class="text-emerald-600">${sum.num/sum.den} (¡Entero! 🎉)</span>`;
             } else {
                 const g = gcd(sum.num, sum.den);
-                opEl.innerHTML = `${values.join(' + ')} = <span class="text-amber-700">${sum.num/g}/${sum.den/g}</span>`;
+                opEl.innerHTML = `${values.join('+')} = <span class="text-amber-700">${sum.num/g}/${sum.den/g}</span>`;
             }
         }
 
@@ -475,7 +544,7 @@
         function verifyCombination() {
             if (selected.length < 2 || isAnimating) return;
             
-            clearInterval(timerInterval); // Detiene el reloj
+            clearInterval(timerInterval); 
             isAnimating = true;
             attempts++;
             document.getElementById('attempts-display').textContent = `${attempts} / 20`;
@@ -494,12 +563,12 @@
                 document.getElementById('score-display').textContent = score;
                 document.getElementById('successful-display').textContent = successful;
                 
-                showSpeechWithOperation(`¡Puntazo! El carpincho junta las maderas...`, result.expr);
+                showSpeechWithOperation(`¡Puntazo!`, result.expr);
                 animateCarpinchoToCards();
             } else {
                 errors++;
                 document.getElementById('errors-display').textContent = `${errors} / 3`;
-                showSpeechWithOperation("No forma un entero 😕", "Prueba otra combinación");
+                showSpeechWithOperation("No es entero 😕", "Intenta de nuevo");
                 
                 setTimeout(() => {
                     cancelSelection();
@@ -508,7 +577,7 @@
                     updateGuideBubble();
                     if (errors >= 3 || attempts >= 20) endGame(errors >= 3);
                     else startTimer();
-                }, 1800);
+                }, 1500);
             }
         }
 
@@ -527,7 +596,6 @@
             document.getElementById('speech-operation').innerHTML = operation;
         }
 
-        // ====================== REPOSICIÓN MESA ======================
         function animateCarpinchoToCards() {
             const carpincho = document.getElementById('carpincho');
             let delay = 0;
@@ -537,7 +605,7 @@
                     carpincho.style.left = card.element.style.left;
                     carpincho.style.top = card.element.style.top;
                 }, delay);
-                delay += 600;
+                delay += 500;
             });
             
             setTimeout(() => {
@@ -566,13 +634,11 @@
                             if ((obj.num / obj.den) < 1) {
                                 tempNewFractions[0] = `${obj.den - obj.num}/${obj.den}`;
                                 if (tempNewFractions.length >= 2) tempNewFractions[1] = "1/2";
-                                if (tempNewFractions.length >= 3) tempNewFractions[2] = "1/2";
                             } else {
                                 tempNewFractions[0] = "1/2";
-                                if (tempNewFractions.length >= 2) tempNewFractions[1] = "1/2";
                             }
                         } else {
-                            tempNewFractions[0] = "1/2"; if (tempNewFractions.length >= 2) tempNewFractions[1] = "1/2";
+                            tempNewFractions[0] = "1/2";
                         }
                     }
 
@@ -591,14 +657,23 @@
                     updateGuideBubble();
                     
                     if (attempts >= 20) endGame();
-                    else startTimer(); // Reinicia el reloj para el próximo turno
-                }, 1000);
-            }, delay + 200);
+                    else startTimer();
+                }, 800);
+            }, delay + 150);
         }
 
-        // ====================== CONTROL JUEGO ======================
         function iniciarJuego() {
             document.getElementById('start-overlay').style.display = 'none';
+            
+            // Intenta reproducir la música de inmediato al iniciar
+            const audio = document.getElementById('bgmusic');
+            audio.play().catch((e) => {
+                console.log("Auto-play prevenido por el navegador, se activará con interactividad.");
+                musicOn = false;
+                document.getElementById('music-btn').textContent = "🏽";
+                document.getElementById('music-btn').className = "flex items-center justify-center w-8 h-8 bg-amber-100 hover:bg-amber-200 rounded-lg text-lg transition-colors border-2 border-amber-300";
+            });
+
             populateBoard();
             startTimer();
         }
@@ -615,15 +690,23 @@
             
             if (byErrors) {
                 document.getElementById('end-icon').textContent = "😕";
-                document.getElementById('end-title').innerHTML = "Juego Terminado<br><span class='text-red-500 text-2xl'>3 errores</span>";
+                document.getElementById('end-title').innerHTML = "Juego Terminado<br><span class='text-red-500 text-xl font-bold'>3 errores</span>";
             }
         }
 
         function toggleMusic() {
             const audio = document.getElementById('bgmusic');
+            const btn = document.getElementById('music-btn');
             musicOn = !musicOn;
-            if (musicOn) audio.play().catch(() => {});
-            else audio.pause();
+            if (musicOn) {
+                audio.play().catch(() => {});
+                btn.textContent = "🔊";
+                btn.className = "flex items-center justify-center w-8 h-8 bg-emerald-100 hover:bg-emerald-200 rounded-lg text-lg transition-colors border-2 border-emerald-300";
+            } else {
+                audio.pause();
+                btn.textContent = "🔇";
+                btn.className = "flex items-center justify-center w-8 h-8 bg-amber-100 hover:bg-amber-200 rounded-lg text-lg transition-colors border-2 border-amber-300";
+            }
         }
     </script>
 </body>
