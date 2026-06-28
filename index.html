@@ -135,7 +135,7 @@
                 <div class="text-3xl sm:text-4xl">🦫</div>
                 <div>
                     <h1 class="text-lg sm:text-2xl font-bold text-amber-600 leading-tight">Carpincho Fraccionero</h1>
-                    <p class="text-emerald-600 text-xs sm:text-sm">¡Suma y resta enteros!</p>
+                    <p class="text-emerald-600 text-xs sm:text-sm">¡Suma y resta fracciones!</p>
                 </div>
             </div>
             
@@ -196,7 +196,7 @@
             <!-- Mensaje guía integrado -->
             <div id="speech-container" class="absolute top-3 left-1/2 -translate-x-1/2 z-30 w-full max-w-md px-2">
                 <div id="speech-bubble" class="bg-white/95 backdrop-blur px-4 py-1.5 rounded-xl text-center shadow-md border-2 border-amber-300">
-                    <span id="speech-text" class="block text-gray-500 text-[10px] font-semibold tracking-wide uppercase">SUMAS DE ENTEROS:</span>
+                    <span id="speech-text" class="block text-gray-500 text-[10px] font-semibold tracking-wide uppercase">SUMAS DE FRACCIONES:</span>
                     <span id="speech-operation" class="block text-amber-600 text-base sm:text-lg font-bold leading-tight">¡A jugar!</span>
                 </div>
             </div>
@@ -482,8 +482,8 @@
             const opEl = document.getElementById('speech-operation');
             
             if (selected.length === 0) {
-                textEl.textContent = attempts >= 10 ? "RESTAS O SUMAS:" : "SUMAS DE ENTEROS:";
-                opEl.textContent = "¡Elige tu jugada! 🦫";
+                textEl.textContent = attempts >= 10 ? "RESTAS O SUMAS:" : "SUMAS DE FRACCIONES:";
+                opEl.textContent = "¡Elegí tu jugada! 🦫";
                 return;
             }
             if (selected.length === 1) {
@@ -568,7 +568,7 @@
             } else {
                 errors++;
                 document.getElementById('errors-display').textContent = `${errors} / 3`;
-                showSpeechWithOperation("No es entero 😕", "Intenta de nuevo");
+                showSpeechWithOperation("No es entero 😕", "Intentá de nuevo");
                 
                 setTimeout(() => {
                     cancelSelection();
